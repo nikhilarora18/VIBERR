@@ -1,0 +1,27 @@
+{% extends 'music/base.html' %}
+{% block title %}{{ alb.album_title }}{% endblock %}
+{% block body %}
+<img src="{{ alb.album_logo }}" height="50" width="500">
+<h1>{{ alb.album_title }}</h1>
+<h2>{{ alb.artist }}</h2>
+{% if error_message %}
+<p>
+    {{ error_message }}
+</p>
+{% endif %}
+<form action="{% url 'favorite' alb.id %}" method="post">
+    {% csrf_token %}
+    {% for song in alb.song_set.all %}
+    <input type="radio" id="song{{ forloop.counter }}" name="song" value="{{ song.id }}"/>
+    <label for="song{{ forloop.counter }}">
+        {{ song.song_title }}
+        {% if song.is_favorite %}
+        <img src="http://pngimg.com/uploads/star/star_PNG41530.png" height="15" width="15"/>
+
+        {% endif %}
+    </label><br>
+    {% endfor %}
+    <br>
+    <input type="submit" value="Change Favorites">
+</form>
+{% endblock %}
